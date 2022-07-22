@@ -2,39 +2,3 @@
 @import "colors";
 @import "global";
 @import "typography";
-
-body {
-  background: #333;
-}
-
-#grid{
-  display: grid;
-  float: right;
-}
-
-.tile {
-  border: 1px solid rgba(100,100,100, 0.8);
-  position: relative;
-  background: #222;
-  float: right;
-  height: 4em;
-  width: 4em;
-  margin: .3em .2em;
-}
-
-main {
-  display: grid;
-  place-items: center;
-}
-
-.kb_keys {
-  padding: 1.7em;
-  margin-right: 0.3em;
-}
-
-#keyboard {
-  display: grid;
-  place-items: center;
-  position: relative;
-  margin-top: 2em;
-}
