@@ -19,7 +19,9 @@ function main(){
 	grid_setup();
 	keyboard_setup();
 	const user_guess = [];
-	window.onkeydown = (key) => { guess_check(key, user_guess) };
+	window.onkeydown = (key) => {
+		keydown_handler(key, user_guess);
+		};
 }
 
 const GUESS_LIMIT = 5;
@@ -30,7 +32,8 @@ function grid_setup()
 	let grid_div = document.querySelector("#grid");
 	for(let j=1; j<=GUESS_LIMIT; j++){
 		let row = document.createElement("div");
-		row.className = `row${j}`;
+		row.dataset.letters = '';
+		row.id = `row${j}`;
 		grid_div.appendChild(row);
 		for(let i=1; i<=WORD_LENGTH; i++){
 			let tileDiv = document.createElement("div");
@@ -80,20 +83,37 @@ function keyboard_setup()
 	keyboard.appendChild(krow3);
 
 }
-
-function guess_check(event, user_guess)
+const addLetter = (currentrow, user_guess) => {
+	let currentBox = document.querySelector(`${currentrow}`).children[user_guess.length - 1];
+	currentBox.dataset.animation = 'pop';
+	setTimeout(() => currentBox.dataset.animation = 'tbd', 100);
+	currentBox.textContent = user_guess[user_guess.length - 1];
+}
+const popLetter = (currentrow, user_guess) => {
+	let currentBox = document.querySelector(`${currentrow}`).children[user_guess.length];
+	currentBox.textContent = user_guess[user_guess.length];
+	currentBox.dataset.animation = 'idle';
+}
+function keydown_handler(event, user_guess)
 {
-	key = event.key.toLowerCase();
+	let curr_row_inx = 1; //temp purposes
+	let currentrow = `#row${curr_row_inx}`; //temporarily stored row
+
+	let key = event.key.toLowerCase();
 	let keyCharCode = key.charCodeAt(0);
 	if(event.code.toLowerCase() == "backspace"){
 		user_guess.pop();
-		console.log(`user input: ${key}, user guess: ${user_guess.join('')}`, user_guess);
+		// console.log(`user input: ${key}, user guess: ${user_guess.join('')}`, user_guess);
+		document.querySelector(currentrow).dataset.letters = user_guess.join(''); //update dataset
+		popLetter(currentrow, user_guess);
 		return;
 	}
 	if( (!(keyCharCode >= ('a'.charCodeAt(0)) && keyCharCode <= 'z'.charCodeAt(0))) || (user_guess.length >= WORD_LENGTH) || event.key.length > 1){
 		return;
 	}
 	user_guess.push(key);
-	console.log(`user input: ${key}, user guess: ${user_guess.join('')}`, user_guess);
+	document.querySelector(currentrow).dataset.letters = user_guess.join(''); //update dataset
+	addLetter(currentrow, user_guess);
+	// console.log(`user input: ${key}, user guess: ${user_guess.join('')}`, user_guess);
 
 }
