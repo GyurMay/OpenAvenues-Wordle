@@ -27,13 +27,25 @@
 }
 
 .tile {
-  border: 1px solid rgba(100,100,100, 0.8);
+  border: 2px solid rgba(100,100,100, 0.8);
   position: relative;
   background: #222;
-  float: right;
-  height: 4em;
-  width: 4em;
-  margin: .3em .2em;
+  float: left;
+  height: 2em;
+  width: 2em;
+  margin: .1em .1em;
+
+  color: white;
+  text-transform: uppercase;
+  text-align: center;  
+  font-family: arial;
+  font-size: 2em;
+  font-weight: bolder;
+
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
 }
 
 main {
@@ -42,8 +54,13 @@ main {
 }
 
 .kb_keys {
-  padding: 1.7em;
-  margin-right: 0.3em;
+    padding: 1.7em;
+    background: #818384;
+    border: none;
+    color: white;
+    border-radius: 0.4em;
+    margin: 0.3em;
+    text-transform: uppercase;
 }
 
 #keyboard {
@@ -52,6 +69,27 @@ main {
   position: relative;
   margin-top: 2em;
 }
+.tile[data-animation='idle']{
+    border: 2px solid rbga(100,100,100, 0.8);
+}
+.tile[data-animation='tbd']{
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+.tile[data-animation='pop']{
+    animation-name: PopIn;
+    animation-duration: 100ms;
+}
+@keyframes PopIn {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    40% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+  }
         </style>
 
         <!-- JS File -->
@@ -65,6 +103,6 @@ main {
         </main>
 
         <!-- JavaScript File -->
-        <script src="dist/all.js?cb=1657120086809"></script>
+        <script src="dist/all.js?cb=1659524930030"></script>
     </body>
 </html>
