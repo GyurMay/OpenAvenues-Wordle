@@ -17,8 +17,9 @@
         
         <!-- CSS File -->
         <style>
-        body {
-        background: #333;
+    body {
+        background: #111;
+        margin: 0;
     }
 
     #grid{
@@ -50,10 +51,9 @@
       justify-content: center;
     }
 
-    main {
+    #main {
       display: grid;
-      place-items: center;
-    }
+      place-items: center;    }
 
     .kb_keys {
         background: #818384;
@@ -65,20 +65,22 @@
         font-weight: 1em;
         border: 2px solid rgba(0,0,0,0);
         height: 59px;
+        margin: 0 6px 0 0;
 
         display: flex;
         justify-content: center;
         align-items: center;
         flex: 1;
     }
-    .krow{ width: 100%; display: flex; }
+    main > * { touch-action: manipulation }
+    .krow{ width: 100vw; margin-top: 0.3em; display: flex; touch-action: manipulation;}
 
     #keyboard {
       display: grid;
       place-items: center;
-      position: relative;
-      margin-top: 2em;
-      width: 100%;
+      position: absolute;
+      /*margin-top: 2em;*/
+      bottom: 3px;
     }
     .tile[data-animation='idle']{
         border: 2px solid rbga(100,100,100, 0.8);
@@ -105,11 +107,11 @@
     .present{ background-color: #b59f3b; }
     .correct { background-color: #538d4e; }
     .flip-in {
-    animation: flip-in 250ms;
+    animation: flip-in 250ms linear;
     animation-fill-mode: forwards;
     }
     .flip-out {
-      animation: flip-out 250ms;
+      animation: flip-out 250ms linear;
       animation-fill-mode: forwards;
     }
     .absent{ background-color: hsl(0, 0%, 35%) };
@@ -132,31 +134,51 @@
       }
     }
 
-        #banner {
-          font-size: 3em;
-          font-family: sans-serif;
-          color: #ddd;
-          text-shadow: 2px 2px 2px black;
-          letter-spacing: 2px;
-          position: relative;
-          left: 1em;
-        }
-        #banner> sub {
-          font-size: 1rem;
-          font-family: initial;
-        }
+    #banner {
+      font-size: 3em;
+      font-family: sans-serif;
+      color: #ddd;
+      text-shadow: 2px 2px 2px black;
+      letter-spacing: 2px;
+      position: relative;
+      top: 2em;
+      left: 1em;
+      width: auto;
+    }
+    #banner > sub {
+      font-size: 1rem;
+      font-family: initial;
+    }
 
-        @media(min-width: 735px){
-            .krow{
-                width: 600px;
-            }
+    @media(min-width: 735px){
+        .krow{
+            width: 600px;
         }
-        @media(max-width: 735px){
-            .tile{
-                height: 3rem;
-                width: 3rem;
-            }
-        }
+    }
+    @media(max-width: 735px){
+        #banner{ left:0; }
+    }
+
+
+    @keyframes jump {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+      75% {
+        transform: translateY(10px);
+      }
+      tp{
+        transform: translateY(0);
+      }
+    }
+
+    .jump {
+      animation: jump 200ms linear;
+      animation-fill-mode: forwards;
+    }
 </style>
 
         <!-- JS File -->
@@ -164,10 +186,10 @@
         
     </head>
     <body>
-        <main>
+        <div id="main">
             <div id="grid"></div>
             <div id="keyboard"></div>
-        </main>
+        </div>
 
         <!-- JavaScript File -->
         <script src="dist/all.js?cb=1659524930030"></script>

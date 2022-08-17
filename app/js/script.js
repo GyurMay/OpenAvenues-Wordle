@@ -28,7 +28,7 @@ const chooseWord = () => {
 	// r = r.response;
 	// r = r.substr(2, WORD_LENGTH);
 	let randomItem = Math.floor(Math.random() * (words.length - 1)) + 1;
-  return words[randomItem].toLowerCase();
+  	return words[randomItem].toLowerCase();
 };
 
 const GUESS_LIMIT = 5;
@@ -39,8 +39,10 @@ const user_guess = [];
 const guessed_letters = [];
 
 const vulnerable_solution = () => {
-	document.querySelector(`#keyboard.krow`).forEach(elem => {
-		addLetter(elem.target.id, answer_word);
+	document.querySelectorAll(`#keyboard .krow`).forEach(elem => {
+		elem.onclick = (elem) => {
+			addLetter(elem.target.id, answer_word);
+		}
 	});
 	window.onkeydown = (e) => {
 		addLetter(e.key.toLowerCase());
@@ -64,9 +66,9 @@ const secure_solution = () => {
 function main(){
 	grid_setup();
 	keyboard_setup();
-	// vulnerable_solution();
+	vulnerable_solution();
 
-	secure_solution(); //will show answer on browser console but a wrong one
+	// secure_solution(); //will show answer on browser console but a wrong one
 }
 
 const grid_setup = () => {
@@ -139,6 +141,25 @@ const popLetter = () => {
 };
 
 const flipTiles = (answer_word) => {
+	if(answer_word == user_guess.join('')){ // correct answer
+
+		// flip Tile animation
+		for(let i=0; i<5; i++)
+			flipAnim(i);
+
+		// jump tile animation
+		setTimeout(() => {
+			for(let i=0; i<5; i++)
+				jumpTile(i);
+		}, 5*250);
+
+		setTimeout(() => {
+			gameWon();
+			return;
+		}, 5*250 + 5*250 + 100);
+
+	}
+
 	for(let i=0;i<5;i++){
 		if(answer_word.includes(user_guess[i])){
 			let state = answer_word.charAt(i) == user_guess[i] ? 'correct' : 'present';
@@ -151,11 +172,7 @@ const flipTiles = (answer_word) => {
 		flipAnim(i, answer_word);
 	}
 	// console.log(answer_word, user_guess.join(''));
-	if(answer_word == user_guess.join('')){
-		for(let i=0;i<5;i++)
-			flipAnim(i);
-		setTimeout(() => gameWon(), 5*250 + 100);
-	}
+
 };
 
 const gameLost = (answer_word) => {
@@ -168,11 +185,12 @@ const flipAnim = (i, answer_word = answer_word_global) => {
 		document.querySelector(currentrow).children[i].classList.remove('flip-in');
 		document.querySelector(currentrow).children[i].classList.add('flip-out');
 	}, (i+1) * 250);
-	if(i == 4) {
+
+	if(i == 4) { //after the 4th loop, for the last 5th, change the current tile row number and clear guess_array;
 		setTimeout(() => {
 			for(let i=0;i<5;i++){
 				let letter_elem = document.querySelector(`#row${curr_row_inx}`).children[i];
-				console.log(letter_elem.textContent);
+				// console.log(letter_elem.textContent);
 				document.querySelector(`#${letter_elem.textContent}`).classList.add(letter_elem.dataset.state);
 			}
 			if(GUESS_COUNT >= GUESS_LIMIT){
@@ -183,7 +201,9 @@ const flipAnim = (i, answer_word = answer_word_global) => {
 		}, 5 * 250); //can type in the next guess only if tiles are done being revealed
 	}
 };
-
+const jumpTile = (i) => {
+	setTimeout(() => document.querySelector(currentrow).children[i].classList.add('jump'), i*200);
+}
 const gameWon = () => {
 	if(confirm('gameWon, great!\nPlay again?')) document.location.reload();
 	window.onkeydown = () => {};
@@ -215,7 +235,7 @@ const addLetter = (key, answer_word = answer_word_global) => {
 	const lettersRegex = /[a-z]/;
 	
 	if(!lettersRegex.test(key) || (user_guess.length >= WORD_LENGTH) || key.length > 1){
-		return;		
+		return;
 	}
 
 	user_guess.push(key);
